@@ -1,0 +1,122 @@
+# =========================================================
+# Python
+# =========================================================
+
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# =========================================================
+# Python environments
+# =========================================================
+
+.venv/
+venv/
+env/
+ENV/
+
+.env
+.env.*
+
+# =========================================================
+# Jupyter
+# =========================================================
+
+.ipynb_checkpoints/
+
+# =========================================================
+# IDE / Editor
+# =========================================================
+
+.vscode/
+.idea/
+
+*.swp
+*.swo
+
+# =========================================================
+# OS generated files
+# =========================================================
+
+.DS_Store
+Thumbs.db
+
+# =========================================================
+# RAW DATASETS
+#
+# UA-DETRAC and BDD100K are large and must not be pushed.
+# =========================================================
+
+data/raw/
+
+# =========================================================
+# Phase 0 automatically generated intermediate CSVs
+#
+# Keep the manually curated/frozen event files,
+# but ignore large/reproducible automatic inventories.
+# =========================================================
+
+data/processed/pilot_events/*_all_events.csv
+data/processed/pilot_events/*_shortlist.csv
+
+# =========================================================
+# Generated visualizations
+# =========================================================
+
+results/visualizations/
+
+# =========================================================
+# Phase 1 generated experiment outputs
+#
+# predictions, runtime logs, evaluation outputs, etc.
+# These can be recreated by running the experiments.
+# =========================================================
+
+results/phase1/
+
+# =========================================================
+# Model weights / checkpoints
+# =========================================================
+
+models/*.pth
+models/*.pt
+models/*.ckpt
+models/*.bin
+models/*.onnx
+models/*.engine
+models/*.safetensors
+
+# Also catch model weights placed elsewhere accidentally
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.engine
+*.safetensors
+
+# =========================================================
+# Logs / temporary files
+# =========================================================
+
+*.log
+*.tmp
+*.temp
+
+tmp/
+temp/
+
+# =========================================================
+# Archives
+# =========================================================
+
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar

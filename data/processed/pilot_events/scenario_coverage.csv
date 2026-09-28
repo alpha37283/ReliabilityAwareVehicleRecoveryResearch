@@ -1,0 +1,11 @@
+scenario_id,scenario_name,status,covered_by,notes
+S01,Short occlusion then reappearance,covered,E001;E002;E011,Multiple partial/severe occlusion cases with reappearance
+S02,Same-color/body-type distractors,covered,E011;E012,Target 24 interacts with visually similar taxis
+S03,Nearly identical vehicles together,provisional,E011;E012,Similar taxis present but near-identical difficulty not formally verified
+S04,Unreadable or unavailable plate,provisional,E003;E011;E012,Targets are too small/distant for reliable plate use; not explicitly measured yet
+S05,Changed viewpoint,provisional,E008;E012,Moving vehicles change position/orientation but no strong viewpoint-specific case yet
+S06,Long disappearance,provisional,E005;E006,Target 4 remains hidden for long intervals behind buses
+S07,Target absent during observation window,covered,E010,Target remains covered until end of sequence
+S08,Distractors appear before target,missing,,Need targeted example
+S09,Repeated occlusions,covered,E005;E006;E007,Same target repeatedly hidden and reappearing
+S10,Lighting/resolution changes,provisional,E005;E006;E007;E011;E012,Day and night data available but no within-event lighting transition

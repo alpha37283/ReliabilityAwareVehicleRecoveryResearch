@@ -120,3 +120,6 @@ temp/
 *.tgz
 *.7z
 *.rar
+
+# External research repositories
+external/

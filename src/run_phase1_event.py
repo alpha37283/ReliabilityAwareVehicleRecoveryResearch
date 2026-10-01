@@ -72,15 +72,15 @@ def load_image_paths(image_dir):
 # Tracker selection
 # ---------------------------------------------------------
 
-def build_tracker(name):
-    """
-    Common tracker registry.
-
-    SAM2.1 and DAM4SAM will be added here later.
-    """
+def build_tracker(name, video_frame_paths=None):
+    """Create one Phase-1 tracker (load SAM2 only when selected)."""
 
     if name == "debug":
         return DebugStaticTracker()
+
+    if name == "sam21":
+        from tracking.sam21_tracker import SAM21Tracker
+        return SAM21Tracker(video_frame_paths=video_frame_paths)
 
     raise ValueError(
         f"Unknown tracker: {name}"
@@ -466,7 +466,12 @@ def run_event(
     # -----------------------------------------------------
 
     tracker = build_tracker(
-        tracker_name
+        tracker_name,
+        video_frame_paths={
+            n: image_paths[n]
+            for n in sorted(image_paths)
+            if selection_frame <= n <= end_frame
+        },
     )
 
     # -----------------------------------------------------
@@ -552,6 +557,12 @@ def run_event(
         # timing block.
         # ---------------------------------------------
 
+        # Synchronize CUDA before/after inference, if the adapter supports it.
+        # Otherwise perf_counter would under-report asynchronous GPU work.
+        sync = getattr(tracker, "synchronize", None)
+        if callable(sync):
+            sync()
+
         start_time = (
             time.perf_counter()
         )
@@ -559,6 +570,9 @@ def run_event(
         prediction = tracker.track(
             frame
         )
+
+        if callable(sync):
+            sync()
 
         end_time = (
             time.perf_counter()
@@ -697,7 +711,7 @@ def main():
         default="debug",
         help=(
             "Tracker backend. "
-            "Currently available: debug"
+            "Available: debug, sam21"
         ),
     )
 

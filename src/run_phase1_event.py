@@ -82,6 +82,10 @@ def build_tracker(name, video_frame_paths=None):
         from tracking.sam21_tracker import SAM21Tracker
         return SAM21Tracker(video_frame_paths=video_frame_paths)
 
+    if name == "dam4sam":
+        from tracking.dam4sam_tracker import DAM4SAMAdapter
+        return DAM4SAMAdapter()
+
     raise ValueError(
         f"Unknown tracker: {name}"
     )
@@ -711,7 +715,7 @@ def main():
         default="debug",
         help=(
             "Tracker backend. "
-            "Available: debug, sam21"
+            "Available: debug, sam21, dam4sam"
         ),
     )
 

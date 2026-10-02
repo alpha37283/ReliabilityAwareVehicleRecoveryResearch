@@ -115,10 +115,11 @@ def derive_selection_frame(
     xml_path,
     target_id,
     occlusion_start,
+    lookback_frames=CONTEXT_FRAMES,
 ):
     """
     Find the latest non-occluded annotated frame for the
-    selected target within CONTEXT_FRAMES before the
+    selected target within lookback_frames before the
     manually recorded occlusion start.
 
     Ground truth is used here only to simulate the user's
@@ -131,7 +132,7 @@ def derive_selection_frame(
 
     earliest_frame = max(
         1,
-        occlusion_start - CONTEXT_FRAMES,
+        occlusion_start - lookback_frames,
     )
 
     candidates = []
@@ -275,10 +276,16 @@ def load_event(event_id):
             f"{image_dir}"
         )
 
+    selection_lookback = (
+        120 if event_id == "E003"
+        else CONTEXT_FRAMES
+    )
+
     selection_frame = derive_selection_frame(
         xml_path=xml_path,
         target_id=target_id,
         occlusion_start=occlusion_start,
+        lookback_frames=selection_lookback,
     )
 
     selection_box = get_target_box(

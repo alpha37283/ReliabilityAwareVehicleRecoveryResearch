@@ -277,7 +277,10 @@ def load_event(event_id):
         )
 
     
-    selection_lookback = 120 if event_id in {"E001", "E003", "E005"} else CONTEXT_FRAMES
+    selection_lookback = (
+    120 if event_id in {"E001", "E003", "E005", "E009"}
+    else CONTEXT_FRAMES
+)
 
     selection_frame = derive_selection_frame(
         xml_path=xml_path,

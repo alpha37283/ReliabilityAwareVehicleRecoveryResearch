@@ -1,0 +1,45 @@
+phase: "1G"
+
+purpose: >
+  Real-mode road-vehicle candidate generation after the selected
+  target becomes persistently CRITICAL or LOST.
+
+detector:
+  model: "yolo11n.pt"
+  imgsz: 640
+  confidence_threshold: 0.20
+  device: 0
+
+vehicle_classes:
+  - car
+  - motorcycle
+  - bus
+  - truck
+
+coco_class_ids:
+  - 2
+  - 3
+  - 5
+  - 7
+
+candidate_filter:
+  min_area_ratio: 0.35
+  max_area_ratio: 15.0
+  min_aspect_ratio: 0.5
+  max_aspect_ratio: 2.0
+
+evaluation:
+  match_iou_threshold: 0.30
+
+trigger:
+  persistent_critical: true
+  lost: true
+
+notes:
+  - "Detector selection based on 10 eligible UA-DETRAC recovery events."
+  - "640/0.20 retained the true target in 10/10 tested reappearance frames."
+  - "Raw candidate count across 10 events: 179."
+  - "Filtered candidate count across 10 events: 146."
+  - "Robust mean end-to-end latency: 50.18 ms."
+  - "Robust latency standard deviation: 0.79 ms."
+  - "Oracle annotations are evaluation/debugging only and are never used by real candidate generation."

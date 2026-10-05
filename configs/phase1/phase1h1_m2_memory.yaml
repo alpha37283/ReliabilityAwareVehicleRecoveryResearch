@@ -1,0 +1,66 @@
+phase: "1H-1"
+variant: "M2"
+
+purpose: >
+  Distractor-aware identity memory using the same positive target
+  memory as M1 plus reliability-gated negative distractor memory.
+
+positive_memory:
+  source: "same_as_M1"
+  type: "recent_pre_occlusion_target_memory"
+  capacity: 5
+  include_original_selection: true
+
+negative_memory:
+  type: "hard_distractor_memory"
+  capacity: 3
+  selection: "highest_target_distractor_similarity"
+
+runtime_reliability_gate:
+  minimum_temporal_iou: 0.63
+  maximum_normalized_center_jump: 0.12
+
+distractor_opportunity:
+  minimum_appearance_similarity: 0.80
+  maximum_normalized_center_distance: 3.0
+  target_overlap_exclusion_iou: 0.30
+
+appearance_encoder:
+  architecture: "resnet50"
+  weights: "IMAGENET1K_V2"
+  embedding_dimension: 2048
+  l2_normalize: true
+  preprocessing: "square_pad_then_resize_224"
+
+matching:
+  positive_score: "max_cosine_to_positive_memory"
+  negative_score: "max_cosine_to_negative_memory"
+  candidate_score: "positive_score_minus_negative_score"
+  no_negative_memory_fallback: "M1_positive_score"
+  ranking: "descending"
+
+candidate_source:
+  mode: "phase1g_real_filtered"
+  detector: "yolo11n.pt"
+  imgsz: 640
+  confidence_threshold: 0.20
+
+constraints:
+  - "M2 positive target memory must be identical to M1."
+  - "No ground truth may be used to create positive or negative memory."
+  - "Ground truth is used only after ranking for offline evaluation."
+  - "Negative memory updates require runtime reliability gating."
+  - "Events without a hard distractor memory fall back to M1."
+  - "Phase 1G remains frozen."
+  - "No plate, make/model, color-specific, motion, or sequential identity cues are used."
+
+evaluation:
+  compare_against:
+    - "H0 single-selection appearance baseline"
+    - "M1 ordinary recent target memory"
+  metrics:
+    - rank1_accuracy
+    - rank3_accuracy
+    - mean_target_rank
+    - mean_reciprocal_rank
+    - target_vs_hardest_distractor_margin

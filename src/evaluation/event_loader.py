@@ -278,16 +278,20 @@ def load_event(event_id):
 
     
     selection_lookback = (
-    120 if event_id in {"E001", "E003", "E005", "E009"}
-    else CONTEXT_FRAMES
-)
-
-    selection_frame = derive_selection_frame(
-        xml_path=xml_path,
-        target_id=target_id,
-        occlusion_start=occlusion_start,
-        lookback_frames=selection_lookback,
+        120 if event_id in {"E003", "E005", "E009"}
+        else CONTEXT_FRAMES
     )
+
+    if event_id == "E001":
+        # Manually verified partially occluded initialization
+        selection_frame = 50
+    else:
+        selection_frame = derive_selection_frame(
+            xml_path=xml_path,
+            target_id=target_id,
+            occlusion_start=occlusion_start,
+            lookback_frames=selection_lookback,
+        )
 
     selection_box = get_target_box(
         xml_path=xml_path,

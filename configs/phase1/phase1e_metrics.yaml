@@ -1,0 +1,46 @@
+phase: "1E"
+purpose: "Event-level tracking, loss, recovery, candidate-generation and runtime evaluation"
+
+metrics:
+
+  pre_occlusion_tracking:
+    meaning: "Was the selected target correctly tracked before the occlusion/recovery event?"
+
+  loss_frame:
+    meaning: "First frame where the tracker is no longer reliably localized on the selected target."
+
+  id_switch:
+    meaning: "Tracker prediction becomes associated with a distractor instead of the selected target."
+
+  correct_recovery:
+    meaning: "After a genuine loss, the original selected vehicle is correctly reacquired."
+
+  false_recovery:
+    meaning: "After loss, a distractor is incorrectly accepted as the selected vehicle."
+
+  no_recovery:
+    meaning: "The true target becomes available again but is not correctly recovered."
+
+  recovery_delay:
+    meaning: "Number of frames between verified target reappearance and correct recovery."
+    formula: "recovery_frame - verified_reappearance_frame"
+
+  candidate_recall:
+    meaning: "Whether the true target is included in the candidate set generated for recovery."
+    formula: "events_with_true_target_in_candidates / eligible_recovery_events"
+
+  distractor_count:
+    meaning: "Number of plausible non-target vehicle candidates present during recovery."
+
+  prediction_latency_ms:
+    meaning: "Average tracker inference time per frame."
+
+  fps:
+    meaning: "1000 / prediction_latency_ms"
+
+notes:
+  - "XML annotation presence is not equivalent to visual visibility."
+  - "Recovery is only valid after a genuine tracker loss."
+  - "A continuous track through occlusion must not be counted as recovery."
+  - "possible_switch_frames from Phase 1C are warnings, not confirmed ID switches."
+  - "Candidate recall is a core Phase-1 metric because Phase 2 cannot recover a target that candidate generation omitted."

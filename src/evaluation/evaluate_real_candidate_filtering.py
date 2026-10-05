@@ -25,8 +25,8 @@ XML_ROOT = (
     / "DETRAC-Test-Annotations-XML"
 )
 
-IMGSZ = 960
-CONF = 0.15
+IMGSZ = 640
+CONF = 0.20
 MATCH_IOU = 0.30
 
 

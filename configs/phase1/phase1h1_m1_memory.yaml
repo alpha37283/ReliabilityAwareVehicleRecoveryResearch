@@ -1,0 +1,57 @@
+phase: "1H-1"
+variant: "M1"
+
+purpose: >
+  Ordinary recent appearance memory baseline for post-occlusion
+  vehicle identity matching.
+
+tracker_source:
+  tracker: "sam21"
+
+memory:
+  type: "recent_fifo"
+  capacity: 5
+  include_original_selection: true
+  recent_tracker_crops: 4
+
+update_rule:
+  require_prediction_present: true
+  require_valid_box: true
+  reliability_gating: false
+  distractor_awareness: false
+
+appearance_encoder:
+  architecture: "resnet50"
+  weights: "IMAGENET1K_V2"
+  embedding_dimension: 2048
+  l2_normalize: true
+  preprocessing: "square_pad_then_resize_224"
+
+matching:
+  metric: "cosine_similarity"
+  candidate_score: "maximum_similarity_over_memory"
+  ranking: "descending"
+
+candidate_source:
+  mode: "phase1g_real_filtered"
+  detector: "yolo11n.pt"
+  imgsz: 640
+  confidence_threshold: 0.20
+
+constraints:
+  - "Ground truth must not be used to choose memory frames."
+  - "Ground truth is used only for offline evaluation."
+  - "No reliability gate is applied in M1."
+  - "No distractor-aware memory is used in M1."
+  - "No plate, color-specific, make/model, or motion cues are used."
+  - "Phase 1G candidate generation remains frozen."
+  - "SAM2.1 is fixed as the memory-observation source for M1 and M2."
+
+evaluation:
+  compare_against: "Phase 1H-0 single-selection appearance baseline"
+  metrics:
+    - rank1_accuracy
+    - rank3_accuracy
+    - mean_target_rank
+    - mean_reciprocal_rank
+    - target_vs_hardest_distractor_margin

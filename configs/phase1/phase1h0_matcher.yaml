@@ -1,0 +1,49 @@
+phase: "1H-0"
+
+purpose: >
+  Establish a fixed visual identity-matching baseline that ranks
+  Phase 1G vehicle candidates against the originally user-selected
+  target vehicle.
+
+reference:
+  source: "original_user_selection"
+  frame: "selection_frame"
+  box: "selection_box"
+  memory_updates: false
+
+candidate_source:
+  mode: "phase1g_real_filtered"
+  detector: "yolo11n.pt"
+  imgsz: 640
+  confidence_threshold: 0.20
+
+appearance_encoder:
+  architecture: "resnet50"
+  weights: "IMAGENET1K_V2"
+  classifier_removed: true
+  embedding_dimension: 2048
+  l2_normalize: true
+
+matching:
+  metric: "cosine_similarity"
+  ranking: "descending"
+  decision_threshold: null
+  ambiguity_margin_threshold: null
+
+evaluation:
+  candidate_gt_match_iou: 0.30
+  metrics:
+    - rank1_accuracy
+    - rank3_accuracy
+    - target_rank
+    - target_similarity
+    - hardest_distractor_similarity
+    - top1_top2_margin
+
+constraints:
+  - "Ground-truth target identity must never be used during ranking."
+  - "Ground truth is used only for offline evaluation."
+  - "No memory updates are allowed in H-0."
+  - "No plate, color-specific, make/model, motion, or sequential cues are used."
+  - "Phase 1G candidate generation remains frozen."
+  - "No MATCH/REJECT threshold is tuned in this initial diagnostic baseline."

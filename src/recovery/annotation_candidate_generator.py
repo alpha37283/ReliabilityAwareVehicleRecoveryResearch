@@ -5,7 +5,7 @@ def filter_plausible_candidates(
     candidates,
     reference_box_xyxy,
     min_area_ratio=0.35,
-    max_area_ratio=3.0,
+    max_area_ratio=15.0,
     min_aspect_ratio=0.5,
     max_aspect_ratio=2.0,
 ):

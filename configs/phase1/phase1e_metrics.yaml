@@ -38,6 +38,32 @@ metrics:
   fps:
     meaning: "1000 / prediction_latency_ms"
 
+automatic_rules:
+
+  target_match:
+    rule: "prediction present AND IoU with annotated target >= 0.30"
+
+  loss_detection:
+    rule: "3 consecutive evaluated frames without a target match"
+    consecutive_frames: 3
+    note: "Automatic loss is an evaluation signal, not proof of visual disappearance."
+
+  recovery_detection:
+    rule: "After a detected loss, 3 consecutive target-matched frames"
+    consecutive_frames: 3
+    note: "Recovery can only be counted if a loss was detected first."
+
+  id_switch_warning:
+    rule: "Prediction overlaps a non-target annotated vehicle more strongly than the target."
+    note: "Requires manual confirmation before being called a confirmed identity switch."
+
+  continuous_tracking:
+    rule: "No loss detected during the event."
+    consequence: "Do not report recovery or recovery delay."
+
+  candidate_success:
+    rule: "True target ID is retained inside the plausible candidate set at the verified recovery frame."
+
 notes:
   - "XML annotation presence is not equivalent to visual visibility."
   - "Recovery is only valid after a genuine tracker loss."
